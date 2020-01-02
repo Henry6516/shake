@@ -74,7 +74,7 @@ class LoginController extends ApiController
         }else{
             $num = 1;
         }
-        $user = UserInfo::findOne(['openid' => $condArr->openid]);
+        $user = UserInfo::findOne(['openid' => $condArr['openid']]);
         $user->num += $num;
         $user->save();
         return $user;
