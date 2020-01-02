@@ -51,8 +51,8 @@ class LoginController extends ApiController
     public function actionSaveInfo()
     {
         $condition = file_get_contents('php://input');
+        //var_dump($condition);exit;
         $condArr = json_decode($condition, true);
-        //var_dump($condArr);exit;
         $user = UserInfo::findOne(['openid' => $condArr['openid']]);
         $user->attributes = $condArr;
         $user->save();
@@ -68,24 +68,16 @@ class LoginController extends ApiController
     public function actionCount()
     {
         $condition = file_get_contents('php://input');
-        $condArr = json_decode($condition);
+        $condArr = json_decode($condition, true);
+        if(isset($condArr['num']) && $condArr['num']) {
+            $num = $condArr['num'];
+        }else{
+            $num = 1;
+        }
         $user = UserInfo::findOne(['openid' => $condArr->openid]);
-        $user->num += $condArr->num;
+        $user->num += $num;
         $user->save();
         return $user;
-    }
-
-
-    /**
-     * 所有用户数量统计
-     * Date: 2019-12-31 11:56
-     * Author: henry
-     */
-    public function actionUserList()
-    {
-        return UserInfo::find()
-            ->select('nickName,num')
-            ->asArray()->all();
     }
 
 
