@@ -14,6 +14,7 @@ if (YII_ENV == 'dev') {
 $config = [
     'id' => 'basic',
     'language'=>'zh-CN',
+    'timeZone' => 'Asia/Shanghai',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'defaultRoute' => 'user/login/login',

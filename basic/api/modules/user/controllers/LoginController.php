@@ -4,6 +4,7 @@ namespace app\api\modules\user\controllers;
 
 
 use app\api\components\ApiController;
+use app\models\Game;
 use app\models\UserInfo;
 use Yii;
 
@@ -59,6 +60,38 @@ class LoginController extends ApiController
         return $user;
     }
 
+    /**
+     * 开始
+     * Date: 2020-01-03 9:27
+     * Author: henry
+     * @throws \yii\db\Exception
+     */
+    public function actionBegin(){
+        $game = Game::findOne(1);
+        $time = time();
+        if ($time >= strtotime($game['startTime']) && $time <= strtotime($game['endTime'])){
+            return [
+                'code' => 400,
+                'message' => '你有当前正在进行的游戏！',
+            ];
+        }
+        //现有用户所有分数清零
+        Yii::$app->db->createCommand()->update('userInfo',['num' => 0])->execute();
+        if(!$game) $game = new Game();
+        $startTime = time();
+        $endTime = $startTime + $game['ready'] + $game['last'];
+        $game->startTime = date('Y-m-d H:i:s', $startTime);
+        $game->endTime = date('Y-m-d H:i:s', $endTime);
+        $game->save();
+        return [
+            'name' => $game['name'],
+            $game
+        ];
+    }
+
+
+
+
 
     /**
      * 单个用户计数
@@ -67,18 +100,44 @@ class LoginController extends ApiController
      */
     public function actionCount()
     {
-        $condition = file_get_contents('php://input');
-        $condArr = json_decode($condition, true);
-        if(isset($condArr['num']) && $condArr['num']) {
-            $num = $condArr['num'];
+        //判断活动是否开始
+        $game = Game::findOne(1);
+        $time = time();
+        if ($time < strtotime($game['startTime'])){
+            return [
+                'code' => 400,
+                'message' => '游戏还未开始！',
+            ];
+        }elseif($time < strtotime($game['startTime']) + $game['ready']){
+            return [
+                'code' => 400,
+                'message' => '游戏正在准备中！',
+            ];
+        }elseif($time > strtotime($game['endTime'])){
+            return [
+                'code' => 400,
+                'message' => '游戏已经结束！',
+            ];
         }else{
-            $num = 1;
+            $condition = file_get_contents('php://input');
+            $condArr = json_decode($condition, true);
+            if(isset($condArr['num']) && $condArr['num']) {
+                $num = $condArr['num'];
+            }else{
+                $num = 1;
+            }
+            $user = UserInfo::findOne(['openid' => $condArr['openid']]);
+            $user->num += $num;
+            $user->save();
+            return $user;
         }
-        $user = UserInfo::findOne(['openid' => $condArr['openid']]);
-        $user->num += $num;
-        $user->save();
-        return $user;
+
     }
+
+
+
+
+
 
 
 

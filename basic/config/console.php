@@ -5,6 +5,8 @@ $db = require __DIR__ . '/db.php';
 
 $config = [
     'id' => 'basic-console',
+    'language'=>'zh-CN',
+    'timeZone' => 'Asia/Shanghai',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'controllerNamespace' => 'app\commands',
@@ -28,13 +30,21 @@ $config = [
         'db' => $db,
     ],
     'params' => $params,
-    /*
+
     'controllerMap' => [
         'fixture' => [ // Fixture generation command line.
             'class' => 'yii\faker\FixtureController',
         ],
+        'workerman' => [
+            'class' => 'app\commands\WorkermanController',
+            'config' => [
+                'ip' => '0.0.0.0',
+                'port' => '2346',
+                'daemonize' => true,
+            ],
+        ],
     ],
-    */
+
 ];
 
 if (YII_ENV_DEV) {
