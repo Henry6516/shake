@@ -110,13 +110,13 @@ class WorkermanController extends Controller
             $inner_text_worker->listen();*/
 
             // 定时，每10秒一次
-            //Timer::add(1, function () {
+            Timer::add(1, function () {
                 // 遍历当前进程所有的客户端连接，发送当前服务器的时间
-                //$data = ApiLogin::getGameTimeData();
                 $data = '123123';
+                $data = ApiLogin::getGameTimeData();
                 //$this->sendMessage($data);
                 $this->sendMessage(json_encode($data));
-            //});
+            });
 
 
         };
