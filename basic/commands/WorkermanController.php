@@ -114,8 +114,8 @@ class WorkermanController extends Controller
             Timer::add(1, function () {
                 // 遍历当前进程所有的客户端连接，发送当前服务器的时间
                 $data = ApiLogin::getGameTimeData();
-                $this->sendMessage($data);
-                //$this->sendMessage(json_encode($data));
+                //$this->sendMessage($data);
+                $this->sendMessage(json_encode($data));
             });
 
 
