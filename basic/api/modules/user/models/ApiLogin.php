@@ -28,7 +28,7 @@ class ApiLogin extends ApiModel
             $status = '准备中';
             $seconds = strtotime($game['startTime']) + $game['ready'] - $time;
         }else{
-            $status = '已结束';
+            $status = '未开始';
             $seconds = 0;
         }
         //return 'status='.$status.' and seconds='.$seconds;

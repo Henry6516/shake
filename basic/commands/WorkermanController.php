@@ -30,7 +30,6 @@ class WorkermanController extends Controller
     public $gracefully;
 
     public  $websocket;
-    public  $flag;
 
     // 这里不需要设置，会读取配置文件中的配置
     public $config = [];
