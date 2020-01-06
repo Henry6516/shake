@@ -16,9 +16,7 @@ class ApiLogin extends ApiModel
      */
     public static function getGameTimeData()
     {
-        var_dump(123);
         $game = Game::findOne(1);
-        var_dump('asd');
         $time = time();
         if ($time > strtotime($game['endTime'])){
             $status = '已结束';
