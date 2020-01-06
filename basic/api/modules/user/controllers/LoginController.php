@@ -4,6 +4,7 @@ namespace app\api\modules\user\controllers;
 
 
 use app\api\components\ApiController;
+use app\api\modules\user\models\ApiLogin;
 use app\models\Game;
 use app\models\UserInfo;
 use Yii;
