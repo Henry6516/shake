@@ -100,24 +100,13 @@ class WorkermanController extends Controller
         $this->websocket = new Worker("websocket://{$ip}:{$port}");
 
         $this->websocket->onWorkerStart = function($worker) {
-            // 开启一个内部端口，方便内部系统推送数据，Text协议格式 文本+换行符
-            /*$inner_text_worker = new Worker('text://0.0.0.0:5678');
-            $inner_text_worker->onMessage = function ($connection, $buffer) {
-                $this->flag = $buffer;
-                var_dump($this->flag);
-                $connection->send(true);
-            };
-            $inner_text_worker->listen();*/
-
             // 定时，每10秒一次
             Timer::add(1, function () {
                 // 遍历当前进程所有的客户端连接，发送当前服务器的时间
-                $data = '123123';
                 $data = ApiLogin::getGameTimeData();
                 //$this->sendMessage($data);
                 $this->sendMessage(json_encode($data));
             });
-
 
         };
 
@@ -131,8 +120,7 @@ class WorkermanController extends Controller
         // Emitted when new connection come
         $this->websocket->onConnect = function ($connection) {
             echo "aha Congratulations, connect server successful! \n";
-            //$data = ApiLogin::getGameTimeData();
-            $data = 'asdasd';
+            $data = ApiLogin::getGameTimeData();
             $connection->send(json_encode($data));
         };
 
