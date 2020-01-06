@@ -123,9 +123,9 @@ class WorkermanController extends Controller
 
         // 4 processes
 
-        /*if(PHP_OS !== 'WINNT') {
+        if(PHP_OS !== 'WINNT') {
             $this->websocket->count = 4;
-        }*/
+        }
 
         // Emitted when new connection come
         $this->websocket->onConnect = function ($connection) {
