@@ -112,7 +112,8 @@ class WorkermanController extends Controller
             // 定时，每10秒一次
             //Timer::add(1, function () {
                 // 遍历当前进程所有的客户端连接，发送当前服务器的时间
-                $data = ApiLogin::getGameTimeData();
+                //$data = ApiLogin::getGameTimeData();
+                $data = '123123';
                 //$this->sendMessage($data);
                 $this->sendMessage(json_encode($data));
             //});
@@ -130,7 +131,8 @@ class WorkermanController extends Controller
         // Emitted when new connection come
         $this->websocket->onConnect = function ($connection) {
             echo "aha Congratulations, connect server successful! \n";
-            $data = ApiLogin::getGameTimeData();
+            //$data = ApiLogin::getGameTimeData();
+            $data = 'asdasd';
             $connection->send(json_encode($data));
         };
 
