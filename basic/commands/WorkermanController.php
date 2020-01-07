@@ -97,7 +97,7 @@ class WorkermanController extends Controller
     {
         $ip = isset($this->config['ip']) ? $this->config['ip'] : $this->ip;
         $port = isset($this->config['port']) ? $this->config['port'] : $this->port;
-        if(PHP_OS !== 'WINNT'){
+        if(PHP_OS === 'WINNT'){
             $this->websocket = new Worker("websocket://{$ip}:{$port}");
         }else{
             // 更多ssl选项请参考手册 http://php.net/manual/zh/context.ssl.php
