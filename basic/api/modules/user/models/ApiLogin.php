@@ -18,11 +18,14 @@ class ApiLogin extends ApiModel
     {
         $game = Game::findOne(1);
         $time = time();
-        if ($time > strtotime($game['endTime'])){
+        if ($time > strtotime($game['endTime']) + 180){//结束超过3分钟时，显示未开始
+            $status = '未开始';
+            $seconds = 0;
+        }elseif ($time > strtotime($game['endTime'])){//结束未超过10分钟时，显示已结束
             $status = '已结束';
             $seconds = 0;
         }elseif($time > strtotime($game['startTime']) + $game['ready']){
-            $status = '已开始';
+            $status = '进行中';
             $seconds = strtotime($game['startTime']) + $game['ready'] + $game['last'] - $time;
         }elseif($time > strtotime($game['startTime'])){
             $status = '准备中';
@@ -31,7 +34,6 @@ class ApiLogin extends ApiModel
             $status = '未开始';
             $seconds = 0;
         }
-        //return 'status='.$status.' and seconds='.$seconds;
         return [
             'status' => $status,
             'seconds' => $seconds,
