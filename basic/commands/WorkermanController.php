@@ -97,8 +97,22 @@ class WorkermanController extends Controller
     {
         $ip = isset($this->config['ip']) ? $this->config['ip'] : $this->ip;
         $port = isset($this->config['port']) ? $this->config['port'] : $this->port;
-        $this->websocket = new Worker("websocket://{$ip}:{$port}");
-
+        if(PHP_OS !== 'WINNT'){
+            $this->websocket = new Worker("websocket://{$ip}:{$port}");
+        }else{
+            // 更多ssl选项请参考手册 http://php.net/manual/zh/context.ssl.php
+            $context = [
+                'ssl' => [
+                    // 请使用绝对路径
+                    'local_cert'                 => '/usr/local/ssl/3283212_shake.shyouranindustry.com.pem', // 也可以是crt文件
+                    'local_pk'                   => '/usr/local/ssl/3283212_shake.shyouranindustry.com.key',
+                    'verify_peer'                => false,
+                    // 'allow_self_signed' => true, //如果是自签名证书需要开启此选项
+                ]
+            ];
+            $this->websocket = new Worker("websocket://{$ip}:{$port}", $context);
+            $this->websocket->transport = 'ssl';
+        }
         $this->websocket->onWorkerStart = function($worker) {
             // 定时，每10秒一次
             Timer::add(1, function () {
@@ -109,7 +123,6 @@ class WorkermanController extends Controller
             });
 
         };
-
 
         // 4 processes
 

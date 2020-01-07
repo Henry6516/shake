@@ -84,10 +84,7 @@ class LoginController extends ApiController
         $game->startTime = date('Y-m-d H:i:s', $startTime);
         $game->endTime = date('Y-m-d H:i:s', $endTime);
         $game->save();
-        return [
-            'name' => $game['name'],
-            $game
-        ];
+        return ApiLogin::getGameTimeData();
     }
 
 
