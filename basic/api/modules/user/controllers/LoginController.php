@@ -144,6 +144,7 @@ class LoginController extends ApiController
         $user = UserInfo::find()
             ->select('nickName,avatar,num')
             ->orderBy('num DESC')
+            ->limit(10)
             ->asArray()->all();
         return [
             'userInfo' => $user,
