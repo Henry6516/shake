@@ -143,6 +143,7 @@ class LoginController extends ApiController
         $game = ApiLogin::getGameTimeData();
         $user = UserInfo::find()
             ->select('nickName,avatar,num')
+            ->where(['>', 'num', 0])
             ->orderBy('num DESC')
             ->limit(10)
             ->asArray()->all();
