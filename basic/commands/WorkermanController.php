@@ -17,6 +17,9 @@
 
 namespace app\commands;
 use app\api\modules\user\models\ApiLogin;
+use app\models\Game;
+use app\models\User;
+use app\models\UserInfo;
 use Workerman\Lib\Timer;
 use Yii;
 use Workerman\Worker;
@@ -58,10 +61,16 @@ class WorkermanController extends Controller
     }
 
     public function sendMessage($message){
+        $count = 0;
         foreach($this->websocket->connections as $connection)
         {
-            $connection->send($message);
+            $res = $connection->send($message);
+            if($res == 1){
+                $count++;
+            }
         }
+        //记录日志
+        file_put_contents(__DIR__ . '/../workerman.log','向 '.$count." 个连接发送了消息!\n");
         return true;
     }
 
@@ -132,7 +141,7 @@ class WorkermanController extends Controller
 
         // Emitted when new connection come
         $this->websocket->onConnect = function ($connection) {
-            echo "aha Congratulations, connect server successful! \n";
+            echo "Congratulations, connect server successful! \n";
             $data = ApiLogin::getGameTimeData();
             $connection->send(json_encode($data));
         };
@@ -141,8 +150,7 @@ class WorkermanController extends Controller
         $this->websocket->onMessage = function ($connection, $data) {
             // Send hello
             if($data === 'new'){  //指定请求，会发送指定数据
-                $info = '123';
-                $data = json_encode($info);
+                $data = '123';
             }
             $connection->send($data);
         };

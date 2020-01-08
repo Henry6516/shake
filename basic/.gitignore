@@ -17,6 +17,7 @@ Thumbs.db
 /api/assets
 /config/db.php
 /commands/TestController.php
+/workerman.log
 
 # composer itself is not needed
 composer.phar
